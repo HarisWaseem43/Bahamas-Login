@@ -5,17 +5,6 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-  //   const apiUrl = import.meta.env.VITE_API_DASHBOARD_LOGIN;
-
-  //   console.log(`${apiUrl}auth/dashboardLogin`);
-
   const handleSubmitForm = async (e) => {
     e.preventDefault();
 
@@ -32,7 +21,7 @@ const LoginForm = () => {
         return <div>Something Went Wrong</div>;
       }
     } catch (error) {
-      //   console.error("Error: ", error);
+      // console.error("Error: ", error);
       return error.message;
     }
   };
@@ -46,7 +35,7 @@ const LoginForm = () => {
           <input
             type="email"
             value={email}
-            onChange={handleEmailChange}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -55,7 +44,7 @@ const LoginForm = () => {
           <input
             type="password"
             value={password}
-            onChange={handlePasswordChange}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
