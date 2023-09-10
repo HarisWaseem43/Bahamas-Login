@@ -7,7 +7,7 @@ const UsersData = () => {
   const [isError, setIsError] = useState(" ");
 
   const accessToken = useSelector((state) => state.auth.accessToken);
-//   console.log(accessToken);
+  //   console.log(accessToken);
 
   const getAPIData = async () => {
     try {
@@ -25,15 +25,15 @@ const UsersData = () => {
         return <div>Something Went Wrong</div>;
       }
     } catch (error) {
-    //   console.log("Error :", error);
+      //   console.log("Error :", error);
       setIsError(error.message);
     }
   };
 
   useEffect(() => {
     if (accessToken) {
-        getAPIData();
-      }
+      getAPIData();
+    }
   }, [accessToken]);
 
   return (
@@ -42,18 +42,28 @@ const UsersData = () => {
       {isError !== " " && <h3>Error: {isError}</h3>}
 
       <div className="grid">
-        {myData.map((items) => {
-          return (
-            <div className="card" key={items.id}>
-              <h4>Username: {items.username}</h4>
-              <h4>Email: {items.email}</h4>
-              <h4>Roll: {items.role}</h4>
-              <h5>
-                {items.creationDate} - {items.lastUpdated}
-              </h5>
-            </div>
-          );
-        })}
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Roll</th>
+              <th>Creation Date - Last Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {myData.map((item) => (
+              <tr key={item.id}>
+                <td>{item.username}</td>
+                <td>{item.email}</td>
+                <td>{item.role}</td>
+                <td>
+                  {item.creationDate} - {item.lastUpdated}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );
