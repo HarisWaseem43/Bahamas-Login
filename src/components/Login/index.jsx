@@ -1,9 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
@@ -15,6 +18,7 @@ const LoginForm = () => {
         password,
       });
       if (response.status === 200) {
+        navigate('/otpverification')
         // console.log(response);
         return response.data;
       } else {
@@ -48,7 +52,9 @@ const LoginForm = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">
+          Login
+        </button>
       </form>
     </div>
   );

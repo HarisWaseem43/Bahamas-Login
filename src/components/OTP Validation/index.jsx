@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../Redux/authSlice";
+import { useNavigate } from "react-router";
 
 const OTPValidation = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ const OTPValidation = () => {
   const [verificationStatus, setVerificationStatus] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleOTPForm = async (e) => {
     e.preventDefault();
@@ -27,23 +29,24 @@ const OTPValidation = () => {
         purpose: purpose,
       });
 
-      console.log("Response Status: ", response.status);
-      console.log("Response Data: ", response.data);
+      // console.log("Response Status: ", response.status);
+      // console.log("Response Data: ", response.data);
 
       if (response.status === 200) {
+        navigate("/otpverification/userdata");
         const accessToken = response.data.accessToken;
-        console.log(accessToken); //Access Token Console
+        // console.log(accessToken);
         dispatch(setAccessToken(accessToken));
 
         setVerificationStatus("OTP Verified!");
-        console.log(response.data);
+        // console.log(response.data);
 
         return response.data;
       } else {
         setVerificationStatus("OTP Verification Failed");
       }
     } catch (error) {
-      console.error("Error: ", error);
+      // console.error("Error: ", error);
       setVerificationStatus("An error occurred while verifying OTP.");
       return error.message;
     }

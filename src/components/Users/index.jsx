@@ -48,7 +48,8 @@ const UsersData = () => {
               <th>Username</th>
               <th>Email</th>
               <th>Roll</th>
-              <th>Creation Date - Last Updated</th>
+              <th>Creation Date</th>
+              <th>Last Updated</th>
             </tr>
           </thead>
           <tbody>
@@ -57,9 +58,8 @@ const UsersData = () => {
                 <td>{item.username}</td>
                 <td>{item.email}</td>
                 <td>{item.role}</td>
-                <td>
-                  {item.creationDate} - {item.lastUpdated}
-                </td>
+                <td>{item.creationDate}</td>
+                <td>{item.lastUpdated}</td>
               </tr>
             ))}
           </tbody>
