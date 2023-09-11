@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("haris.jinnbyte@yopmail.com");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
@@ -13,12 +13,12 @@ const LoginForm = () => {
 
     try {
       const apiUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await axios.post(`${apiUrl}auth/dashboardLogin`, {
+      const response = await axios.post(`${apiUrl}/auth/dashboardLogin`, {
         email,
         password,
       });
       if (response.status === 200) {
-        navigate('/otpverification')
+        navigate("/otpverification");
         // console.log(response);
         return response.data;
       } else {
@@ -52,9 +52,7 @@ const LoginForm = () => {
             required
           />
         </div>
-        <button type="submit">
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );

@@ -1,11 +1,13 @@
 import { useState } from "react";
+import "./index.css";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../Redux/authSlice";
 import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
 
 const OTPValidation = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("haris.jinnbyte@yopmail.com");
   const [otpcode, setOTPCode] = useState("");
   const [purpose, setPurpose] = useState("ADMIN_LOGIN");
   const [verificationStatus, setVerificationStatus] = useState("");
@@ -15,15 +17,10 @@ const OTPValidation = () => {
 
   const handleOTPForm = async (e) => {
     e.preventDefault();
-    console.log("Email :", email);
-    console.log("OTP-Code :", otpcode);
-    console.log("Purpose :", purpose);
-
     try {
       const apiUrl = import.meta.env.VITE_API_BASE_URL;
-      console.log("API: ", apiUrl);
 
-      const response = await axios.post(`${apiUrl}auth/verifyOTP`, {
+      const response = await axios.post(`${apiUrl}/auth/verifyOTP`, {
         email: email,
         otpCode: otpcode,
         purpose: purpose,
@@ -34,19 +31,22 @@ const OTPValidation = () => {
 
       if (response.status === 200) {
         navigate("/otpverification/userdata");
-        const accessToken = response.data.accessToken;
-        // console.log(accessToken);
+        const { accessToken, refreshToken } = response.data;
         dispatch(setAccessToken(accessToken));
 
+        Cookies.set("refreshToken", refreshToken, { expires: 10 / (24 * 60) });
+        Cookies.set("accessToken", accessToken, { expires: 10 / (24 * 60) });
+
+        // console.log("OTP AccessToken: ", accessToken);
+        // console.log("OTP Refresh Token: ", refreshToken);
+
         setVerificationStatus("OTP Verified!");
-        // console.log(response.data);
 
         return response.data;
       } else {
         setVerificationStatus("OTP Verification Failed");
       }
     } catch (error) {
-      // console.error("Error: ", error);
       setVerificationStatus("An error occurred while verifying OTP.");
       return error.message;
     }
@@ -74,7 +74,7 @@ const OTPValidation = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="form-group-1">
           <label>Purpose:</label>
           <input
             type="text"
