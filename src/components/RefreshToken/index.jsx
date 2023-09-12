@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 const RefreshTokens = async () => {
   try {
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
-    console.log("API: ", apiUrl);
+    // console.log("API: ", apiUrl);
 
     const accessToken = Cookies.get("accessToken");
     const refreshToken = Cookies.get("refreshToken");
