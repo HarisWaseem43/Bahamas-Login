@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [otpemail, setOTPEmail] = useState("haris.jinnbyte@yopmail.com");
+  const [otpemail, setOTPEmail] = useState("");
   const [otpcode, setOTPCode] = useState("");
   const [purpose, setPurpose] = useState("ADMIN_LOGIN");
   const [verificationStatus, setVerificationStatus] = useState("");
@@ -29,6 +29,7 @@ const LoginForm = () => {
       });
       if (response.status === 200) {
         setIsLoginConfirmed(true);
+        setOTPEmail(email);
         return response.data;
       } else {
         return <div>Something Went Wrong</div>;
