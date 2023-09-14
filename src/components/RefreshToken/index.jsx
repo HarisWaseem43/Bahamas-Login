@@ -44,8 +44,21 @@ const RefreshTokens = () => {
   };
 
   // Call the refreshTokens function when the component mounts
+  // useEffect(() => {
+  //   refreshTokens();
+  // }, [refreshToken]);
+
   useEffect(() => {
-    refreshTokens();
+    async function getRefreshTokens() {
+      try {
+        if (refreshToken) {
+          await refreshTokens();
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+    getRefreshTokens();
   }, [refreshToken]);
 
   return null;
