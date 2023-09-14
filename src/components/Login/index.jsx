@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [otpemail, setOTPEmail] = useState("");
+  const [otpemail, setOTPEmail] = useState("haris.jinnbyte@yopmail.com");
   const [otpcode, setOTPCode] = useState("");
   const [purpose, setPurpose] = useState("ADMIN_LOGIN");
   const [verificationStatus, setVerificationStatus] = useState("");
@@ -79,13 +79,12 @@ const LoginForm = () => {
           <form onSubmit={handleOTPValidation}>
             <h2>OTP Veridication</h2>
             {/* OTP Form */}
-            <div className="form-group">
+            <div className="form-group-1">
               <label>Email:</label>
               <input
                 type="email"
                 value={otpemail}
                 onChange={(e) => setOTPEmail(e.target.value)}
-                required
               />
             </div>
             <div className="form-group">
