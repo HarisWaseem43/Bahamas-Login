@@ -13,6 +13,7 @@ const LoginForm = () => {
   const [otpcode, setOTPCode] = useState("");
   const [purpose, setPurpose] = useState("ADMIN_LOGIN");
   const [verificationStatus, setVerificationStatus] = useState("");
+  const [isLoginConfirmed, setIsLoginConfirmed] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,14 +28,12 @@ const LoginForm = () => {
         password,
       });
       if (response.status === 200) {
-        // navigate("/otpverification");
-        // console.log(response);
+        setIsLoginConfirmed(true);
         return response.data;
       } else {
         return <div>Something Went Wrong</div>;
       }
     } catch (error) {
-      // console.error("Error: ", error);
       return error.message;
     }
   };
@@ -50,9 +49,6 @@ const LoginForm = () => {
         purpose: purpose,
       });
 
-      // console.log("Response Status: ", response.status);
-      // console.log("Response Data: ", response.data);
-
       if (response.status === 200) {
         navigate("/userdata");
         const { accessToken, refreshToken } = response.data;
@@ -61,9 +57,6 @@ const LoginForm = () => {
 
         Cookies.set("refreshToken", refreshToken, { expires: 10 / (24 * 60) });
         Cookies.set("accessToken", accessToken, { expires: 10 / (24 * 60) });
-
-        // console.log("OTP AccessToken: ", accessToken);
-        // console.log("OTP Refresh Token: ", refreshToken);
 
         setVerificationStatus("OTP Verified!");
 
@@ -79,62 +72,69 @@ const LoginForm = () => {
 
   return (
     <div className="login-container">
-      {/* LOGIN Form */}
-      <h2>Login</h2>
-      <form onSubmit={handleSubmitForm}>
-        <div className="form-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {/* OTP Form */}
-      <h2>OTP Verification</h2>
-      <form onSubmit={handleOTPValidation}>
-        <div className="form-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            value={otpemail}
-            onChange={(e) => setOTPEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>OTP Code:</label>
-          <input
-            type="password"
-            value={otpcode}
-            onChange={(e) => setOTPCode(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group-1">
-          <label>Purpose:</label>
-          <input
-            type="text"
-            value={purpose}
-            onChange={(e) => setPurpose(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Verify OTP</button>
-        <p>{verificationStatus}</p>
-      </form>
+      {/* LOGIN and OTPVerification Form */}
+      {isLoginConfirmed ? (
+        <>
+          {/* OTP Verification Form */}
+          <form onSubmit={handleOTPValidation}>
+            <h2>OTP Veridication</h2>
+            {/* OTP Form */}
+            <div className="form-group">
+              <label>Email:</label>
+              <input
+                type="email"
+                value={otpemail}
+                onChange={(e) => setOTPEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>OTP Code:</label>
+              <input
+                type="password"
+                value={otpcode}
+                onChange={(e) => setOTPCode(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group-1">
+              <label>Purpose:</label>
+              <input
+                type="text"
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit">Verify OTP</button>
+            <p>{verificationStatus}</p>
+          </form>
+        </>
+      ) : (
+        //Login Form
+        <form onSubmit={handleSubmitForm}>
+          <h2>Login</h2>
+          <div className="form-group">
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+      )}
     </div>
   );
 };
