@@ -1,10 +1,10 @@
-import { useState } from "react";
 import "./index.css";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setRefreshToken } from "../Redux/authSlice";
-import Cookies from "js-cookie";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");

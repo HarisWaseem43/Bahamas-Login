@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../Redux/authSlice";
 
@@ -29,7 +29,7 @@ const RefreshTokens = () => {
         // console.log("New AccessToken: ", accessToken);
         // console.log("New RefreshToken: ", refreshToken);
 
-        Cookies.set("accessToken", accessToken, { expires: 10 / (24 * 60) });
+        Cookies.set("newAccessToken", accessToken, { expires: 10 / (24 * 60) });
         Cookies.set("refreshToken", refreshToken, {
           expires: 10 / (24 * 60),
         });

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { clearTokens } from "../Redux/authSlice";
-import Cookies from "js-cookie";
 
 const UsersData = () => {
   const [myData, setMyData] = useState([]);
@@ -38,10 +38,11 @@ const UsersData = () => {
         setMyData(response.data.data);
       } else if (response.status === 401) {
         if (refreshCount < 3) {
-          const accessToken = Cookies.get("accessToken");
-          // console.log("Cookies New Access Token", accessToken);
+          const newAccessToken = Cookies.get("newAccessToken");
+          console.log("Cookies New Access Token", accessToken);
+
           const newHeaders = {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${newAccessToken}`,
           };
           const newResponse = await axios.get(
             `${apiUrl}/dashboard/users/getAllUsers`,
