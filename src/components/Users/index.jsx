@@ -39,7 +39,7 @@ const UsersData = () => {
       } else if (response.status === 401) {
         if (refreshCount < 3) {
           const newAccessToken = Cookies.get("newAccessToken");
-          console.log("Cookies New Access Token", accessToken);
+          // console.log("Cookies New Access Token", accessToken);
 
           const newHeaders = {
             Authorization: `Bearer ${newAccessToken}`,
