@@ -16,7 +16,7 @@ function App() {
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
-      {/* Call the Refresh Token Function */}
+      {/* Call the Refresh Token Function for New Access Token */}
       <RefreshTokens />
     </>
   );

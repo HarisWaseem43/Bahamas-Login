@@ -16,8 +16,18 @@ const UsersData = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(clearTokens());
+    const token = Cookies.get("newAccessToken");
+    if (token) {
+      const tokenData = JSON.parse(atob(token.split(".")[1]));
+      const expirationTime = tokenData.exp * 1000;
+      const currentTime = Date.now();
+      if (currentTime < expirationTime) {
+        alert("Token is still valid. You can't log out yet.");
+        return;
+      }
+    }
 
+    dispatch(clearTokens());
     navigate("/");
   };
 
@@ -81,6 +91,9 @@ const UsersData = () => {
       }
     }
     getData();
+    if (navigate === "/" && accessToken) {
+      navigate("/userdata");
+    }
   }, [accessToken]);
 
   return (
