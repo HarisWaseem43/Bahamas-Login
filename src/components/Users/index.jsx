@@ -26,7 +26,6 @@ const UsersData = () => {
         return;
       }
     }
-
     dispatch(clearTokens());
     navigate("/");
   };
