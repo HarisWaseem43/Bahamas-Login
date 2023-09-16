@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import RefreshTokens from "../RefreshToken/index";
 import { useNavigate } from "react-router";
-import { setNewAccessToken, clearTokens } from "../Redux/authSlice";
+import { clearTokens } from "../Redux/authSlice";
 
 const UsersData = () => {
   const [myData, setMyData] = useState([]);
@@ -11,12 +11,22 @@ const UsersData = () => {
   const [refreshCount, setRefreshCount] = useState(0);
 
   const accessToken = useSelector((state) => state.auth.accessToken);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    const token = Cookies.get("newAccessToken");
+    if (token) {
+      const tokenData = JSON.parse(atob(token.split(".")[1]));
+      const expirationTime = tokenData.exp * 1000;
+      const currentTime = Date.now();
+      if (currentTime < expirationTime) {
+        alert("Token is still valid. You can't log out yet.");
+        return;
+      }
+    }
     dispatch(clearTokens());
-
     navigate("/");
   };
 
@@ -37,9 +47,8 @@ const UsersData = () => {
         setMyData(response.data.data);
       } else if (response.status === 401) {
         if (refreshCount < 3) {
-          const newAccessToken = await RefreshTokens();
-
-          dispatch(setNewAccessToken(newAccessToken));
+          const newAccessToken = Cookies.get("newAccessToken");
+          // console.log("Cookies New Access Token", accessToken);
 
           const newHeaders = {
             Authorization: `Bearer ${newAccessToken}`,
@@ -81,6 +90,9 @@ const UsersData = () => {
       }
     }
     getData();
+    if (navigate === "/" && accessToken) {
+      navigate("/userdata");
+    }
   }, [accessToken]);
 
   return (
