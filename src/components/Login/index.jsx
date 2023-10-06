@@ -1,7 +1,7 @@
 import "./index.css";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setRefreshToken } from "../Redux/authSlice";
@@ -10,7 +10,8 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otpemail, setOTPEmail] = useState("");
-  const [otpcode, setOTPCode] = useState("");
+  const [otpcode, setOTPCode] = useState(["", "", "", ""]);
+  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const [purpose, setPurpose] = useState("ADMIN_LOGIN");
   const [verificationStatus, setVerificationStatus] = useState("");
   const [isLoginConfirmed, setIsLoginConfirmed] = useState(false);
@@ -39,6 +40,31 @@ const LoginForm = () => {
     }
   };
 
+  const handleOTPChange = (e, index) => {
+    const value = e.target.value;
+    // Ensure that only digits are entered and limit the input to 1 character
+    const sanitizedValue = value.replace(/\D/g, "").slice(0, 1);
+
+    // Update the OTP array at the specified index
+    const newOTP = [...otpcode];
+    newOTP[index] = sanitizedValue;
+    setOTPCode(newOTP);
+
+    // Focus on the next input field, if available
+    if (index < inputRefs.length - 1 && sanitizedValue !== "") {
+      inputRefs[index + 1].current.focus();
+    }
+  };
+
+  const handleBackspace = (e, index) => {
+    if (e.key === "Backspace" && index > 0 && otpcode[index] === "") {
+      // Move focus to the previous input field and clear one character from it
+      inputRefs[index - 1].current.focus();
+      const newOTP = [...otpcode];
+      newOTP[index - 1] = "";
+      setOTPCode(newOTP);
+    }
+  };
   const handleOTPValidation = async (e) => {
     e.preventDefault();
     try {
@@ -88,7 +114,20 @@ const LoginForm = () => {
                 onChange={(e) => setOTPEmail(e.target.value)}
               />
             </div>
-            <div className="form-group">
+            <div>
+              {otpcode.map((digit, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  value={digit}
+                  onChange={(e) => handleOTPChange(e, index)}
+                  onKeyDown={(e) => handleBackspace(e, index)}
+                  maxLength={1}
+                  ref={inputRefs[index]}
+                />
+              ))}
+            </div>
+            {/* <div className="form-group">
               <label>OTP Code:</label>
               <input
                 type="password"
@@ -96,7 +135,7 @@ const LoginForm = () => {
                 onChange={(e) => setOTPCode(e.target.value)}
                 required
               />
-            </div>
+            </div> */}
             <div className="form-group-1">
               <label>Purpose:</label>
               <input
